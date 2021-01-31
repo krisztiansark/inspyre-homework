@@ -4,10 +4,11 @@ import Index from "../Index/Index";
 import ItemDetails from "../ItemDetails/ItemDetails";
 import EditItem from "../EditItem/EditItem";
 import NewItem from "../NewItem/NewItem";
-
+import GlobalStyles from "../../utils/globalStyles";
 function App() {
   return (
     <Router>
+      <GlobalStyles />
       <Switch>
         <Route exact path="/" component={Index} />
 

@@ -3,14 +3,16 @@ import DatePicker from "react-datepicker";
 import { useHistory } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { getUsers, patchItems } from "../../utils/apiUtils";
+import dateFormat from "dateformat";
+
 function EditItem(props) {
   let history = useHistory();
   const [info, setInfo] = useState(props.location.state);
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(info.dueDate));
   const [users, setUsers] = useState([]);
 
   const { id } = props.match.params;
-  const { name, description, assignedTo, dueDate } = info;
+  const { name, description, assignedTo } = info;
 
   useEffect(() => {
     let fetch = async () => {
@@ -18,6 +20,8 @@ function EditItem(props) {
 
       return setUsers(result);
     };
+    console.log(startDate);
+    // console.log(info.dueDate);
     fetch();
 
     return () => {};
@@ -27,7 +31,7 @@ function EditItem(props) {
     setInfo({ ...info, [e.target.name]: e.target.value });
   }
   function handleChangeDate(e) {
-    setInfo({ ...info, dueDate: `${e}` });
+    setInfo({ ...info, dueDate: dateFormat(e, "yyyy-mm-dd") });
     setStartDate(e);
   }
 
@@ -37,9 +41,9 @@ function EditItem(props) {
     let patch = async () => {
       let response = await patchItems(id, info);
 
-      console.log(response);
+      // console.log(response);
       setInfo({ ...info, ...response });
-      console.log(info);
+      // console.log(info);
       history.push(`/item-details/${id}`);
     };
     patch();
@@ -73,7 +77,7 @@ function EditItem(props) {
         <DatePicker
           selected={startDate}
           onChange={handleChangeDate}
-          dateFormat="yyyy/MM/dd"
+          dateFormat="yyyy-MM-dd"
         />
 
         <select value={assignedTo.id} onChange={handlePerson}>

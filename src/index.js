@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "../src/components/App/App";
 import reportWebVitals from "./reportWebVitals";
+import "../node_modules/bootstrap-4-grid/css/grid.min.css";
 
 ReactDOM.render(
   <React.StrictMode>
