@@ -5,12 +5,16 @@ export const ButtonDiv = styled.div`
 `;
 
 export const ProfileCard = styled.div`
-  /* border: 1px solid red; */
+  border: ${({ selected }) =>
+    selected ? "1px solid rgba(37, 208, 205, 0.8)" : "1px solid transparent"};
   margin: 3%;
   cursor: pointer;
   transition: all 300ms;
   border-radius: 10px;
   background: rgba(37, 208, 205, 0.8);
+  background: ${({ selected }) =>
+    selected ? "rgba(57, 168, 185, 1)" : "rgba(37, 208, 205, 0.8)"};
+  transform: ${({ selected }) => (selected ? " scale(1.02)" : "scale(1)")};
   &:hover {
     transform: scale(1.02);
     box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.5);
@@ -21,4 +25,18 @@ export const ProfileDiv = styled.div`
   margin: 5%;
   padding: 2.5% 0 2.5% 0;
   border-radius: 10px;
+`;
+
+export const ButtonRow = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+
+  margin-left: auto;
+  margin-right: auto;
+  bottom: 0;
+`;
+
+export const Spacer = styled.div`
+  height: 20px;
 `;

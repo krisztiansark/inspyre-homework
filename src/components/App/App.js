@@ -12,11 +12,11 @@ function App() {
       <Switch>
         <Route exact path="/" component={Index} />
 
-        <Route path="/item-details/:id" component={ItemDetails} />
+        <Route exact path="/item-details/:id" component={ItemDetails} />
 
-        <Route path="/new-item" component={NewItem} />
+        <Route exact path="/new-item" component={NewItem} />
 
-        <Route path="/edit-item/:id" component={EditItem} />
+        <Route exact path="/edit-item/:id" component={EditItem} />
       </Switch>
     </Router>
   );

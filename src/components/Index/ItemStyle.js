@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { Container } from "../../utils/globalStyles";
+import { MEDIA, COLORS } from "../../utils/styleConstants";
 
 export const ContainerItem = styled(Container)`
   transition: all 300ms;
-  background: rgba(37, 208, 205, 0.8);
+  background: ${COLORS.background};
   max-width: 500px;
   border-radius: 8px;
   position: relative;
@@ -30,13 +31,13 @@ export const Content = styled.div`
  pointer-events:none; `};
 `;
 
-export const TitleDiv = styled.div`
-  /* border: 1px solid black; */
-`;
+// export const TitleDiv = styled.div`
+//   /* border: 1px solid black; */
+// `;
 
-export const DueDiv = styled.div`
-  /* border: 1px solid black; */
-`;
+// export const DueDiv = styled.div`
+//   /* border: 1px solid black; */
+// `;
 
 export const DeleteDiv = styled.div`
   /* border: 1px solid black; */

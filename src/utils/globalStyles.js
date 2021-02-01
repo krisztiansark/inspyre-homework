@@ -1,28 +1,13 @@
 import styled, { createGlobalStyle } from "styled-components";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
-export const COLORS = {
-  primary: "white",
-  primaryHover: "orange",
-  secondary: "rgba(223, 150, 48, 1)",
-  secondaryHover: "velvet",
-  white: "white",
-  black: "black",
-  border: "rgba(137, 208, 205, 1)",
-  background: "rgba(37, 208, 205, 0.8)",
-};
-
-const MEDIA = {
-  sm: "575.98px",
-  md: "576px",
-  lg: "768px",
-};
+import { MEDIA, COLORS } from "./styleConstants";
 
 const GlobalStyles = createGlobalStyle`
 
 * {
     line-height:1.7;
-    letter-spacing: .6px;
+    letter-spacing: .9px;
     box-sizing: border-box;
     margin:0;
     padding:0;
@@ -33,46 +18,68 @@ const GlobalStyles = createGlobalStyle`
 }`;
 
 export const Container = styled.div`
-  /* margin: auto; */
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  height: auto;
+  width: auto;
+
+  ${({ open }) =>
+    open
+      ? `opacity:0; pointer-events:none;`
+      : `transition: all 600ms; opacity:1`}
 `;
 
 export const Button = styled.button`
   transition: all 300ms;
   color: ${COLORS.primary};
-  background: rgba(19, 148, 141, 1);
-  /* color: ${({ secondary }) => secondary && COLORS.secondary}; */
-  color: ${({ color }) => color};
+  /* background: rgba(19, 148, 141, 1); */
+  background: ${COLORS.buttonBckg};
+  width: 100%;
+  display: inline-block;
+  width: fit-content;
+  font-size: 1rem;
   background: ${({ bckg }) => bckg};
-  background: ${({ danger }) => danger && `rgba(206, 85, 85, 1)`};
+  background: ${({ danger }) => danger && COLORS.danger};
   background: ${({ special }) => special && `${COLORS.secondary}`};
   ${({ disabled }) => disabled && `background: grey; pointer-events:none;`}
   border: 0;
   margin: auto;
   border-radius: 5px;
-  padding: 5px 10px 5px 10px;
+  padding: 5px 15px 5px 15px;
   cursor: pointer;
   &:hover {
-    transform: scale(1.05);
+    opacity: 0.8;
   }
 `;
 
 export const H1 = styled.h1`
+  display: inline-block;
   font-size: ${({ main }) => main && "45px"};
-  /* display: inline-block; */
-  display: block;
+  ${({ main }) =>
+    main &&
+    `
+  border-bottom: 1px solid white;`}
+
+  display: inline-block;
 `;
 export const H2 = styled.h2`
-  font-size: ${({ main }) => main && "45px"};
+  display: inline-block;
+  /* border-bottom: 1px solid white; */
+  /* border-radius: 5px;
+  padding-left: 5px;
+  border-left: 1px solid white; */
 `;
 export const H3 = styled.h3`
-  font-size: ${({ main }) => main && "45px"};
+  display: inline-block;
+  margin: auto 0 auto 0 !important;
 `;
 export const H4 = styled.h4`
-  font-size: ${({ main }) => main && "45px"};
+  display: inline-block;
+`;
+export const H5 = styled.h5`
+  margin-bottom: auto;
 `;
 export const P = styled.p`
-  font-size: ${({ main }) => main && "45px"};
+  display: inline-block;
 `;
 
 export const RouterLink = styled(Link)`
@@ -82,42 +89,15 @@ export const RouterLink = styled(Link)`
 export const Input = styled.input`
   transition: all 300ms;
   border-radius: 10px;
-  color: black;
+
   padding-left: 5px;
   margin-left: auto;
   margin-right: auto;
-  border: none;
-
-  @media (max-width: 640px) {
-    height: 25px;
-    &:focus {
-      border-radius: 20px;
-    }
-    width: 49%;
-    height: 25px;
-    padding-left: 8px;
-    font-size: 0.9rem;
-  }
-
-  @media (min-width: 641px) {
-    width: 48%;
-    height: 45px;
-
-    padding-left: 15px;
-
-    font-size: 1.2rem;
-  }
-
-  @media (min-width: 1024px) {
-    width: 40%;
-    height: 30px;
-    margin: 0 0 5% 0;
-  }
 
   background: rgba(255, 259, 250, 0.3);
   border: 1px solid ${COLORS.border};
   color: rgb(80, 80, 80);
-
+  font-size: 1rem;
   &::placeholder {
     color: ${({ dark }) => (!dark ? `rgba(255,255,255,.8)` : `default`)};
   }
@@ -130,50 +110,42 @@ export const Textarea = styled.textarea`
   border-radius: 10px;
   transition: all 300ms;
   transition-timing-function: ease-out;
-  border: none;
-  font-size: 0.9rem;
+  border-width: 1px;
 
-  @media (max-width: ${MEDIA.sm}) {
-    height: 70px;
-    width: 95%;
-    &:focus {
-    }
-    margin-bottom: 15px;
-    padding-left: 8px;
-    padding-top: 5px;
-  }
-
-  @media (min-width: ${MEDIA.md}) {
-    height: 80px;
-
-    border-width: 1px;
-    width: 100%;
-    height: 90px;
-    padding-left: 15px;
-    font-size: 1.4rem;
-  }
-
-  @media (min-width: ${MEDIA.lg}) {
-    height: 80px;
-    border-width: 1px;
-    width: 90%;
-    height: 120px;
-    padding-left: 15px;
-    margin: 0 0 5% 0;
-  }
-
+  min-height: 100px;
+  max-height: 500px;
+  max-width: 450px;
+  width: 100%;
+  padding-left: 5px;
   background: rgba(255, 259, 250, 0.3);
   border: 1px solid ${COLORS.border};
   color: rgb(80, 80, 80);
-
+  font-family: inherit;
+  font-size: inherit;
   &::placeholder {
     color: ${({ dark }) => (!dark ? `rgba(255,255,255,.8)` : `default`)};
   }
 `;
 
-export const Form = styled.form`
-  /* background: rgba(255, 155, 155, 0.2); */
+export const Select = styled.select`
+  transition: all 300ms;
   border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+  height: 30px;
+  option {
+    color: red !important;
+  }
+  background: rgba(255, 259, 250, 0.3);
+  border: 1px solid ${COLORS.border};
+  color: rgb(80, 80, 80);
+`;
+
+export const Form = styled.form`
+  background: ${COLORS.backgroundForm};
+  min-height: 400px;
+  border-radius: 10px;
+  margin: 10% 0 0 0;
 `;
 
 export const DatePickerStyled = styled(DatePicker)`
@@ -184,54 +156,54 @@ export const DatePickerStyled = styled(DatePicker)`
   margin-left: auto;
   margin-right: auto;
   border: none;
-
+  width: 100%;
   @media (max-width: ${MEDIA.sm}) {
     height: 25px;
     &:focus {
       border-radius: 20px;
     }
-    width: 49%;
-    height: 25px;
+
+    height: 35px;
     padding-left: 8px;
     font-size: 0.9rem;
   }
 
   @media (min-width: ${MEDIA.md}) {
-    width: 48%;
-    height: 45px;
-
+    height: 35px;
     padding-left: 15px;
-
-    font-size: 1.2rem;
-  }
-
-  @media (min-width: ${MEDIA.lg}) {
-    width: 100%;
-    height: 30px;
-    margin: 5%;
+    font-size: 1rem;
   }
 
   background: rgba(255, 259, 250, 0.3);
   border: 1px solid ${COLORS.border};
   color: rgb(80, 80, 80);
+`;
 
-  input {
-    &::placeholder {
-      color: ${({ dark }) => (!dark ? `rgba(255,255,255,.8)` : `default`)};
-    }
-  }
+export const DatePickerDiv = styled.div`
+  margin-top: 10%;
 `;
 
 export const Img = styled.img`
   width: 80px;
   height: 80px;
+  ${({ sm, lg }) =>
+    (sm &&
+      `
+  width: 50px;
+  height: 50px;
+`) ||
+    (lg &&
+      `    
+  width: 100px;
+  height: 100px;`)}
   border-radius: 50%;
   padding: 5px;
-  filter: grayscale(80%);
+  margin: auto 0 auto 0;
+  filter: ${({ selected }) => (selected ? "grayscale(0%)" : "grayscale(80%)")};
 `;
 
 export const Label = styled.label`
-  margin: 5% 0 0 0;
+  /* margin: 5% 0 0 0; */
 `;
 
 export default GlobalStyles;

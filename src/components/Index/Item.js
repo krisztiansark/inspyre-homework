@@ -4,12 +4,12 @@ import { Button, H2, H4, RouterLink } from "../../utils/globalStyles";
 import {
   ContainerItem,
   DueSignal,
-  TitleDiv,
-  DueDiv,
   DeleteDiv,
   ConfirmationDiv,
   Content,
 } from "./ItemStyle";
+import Row from "../blocks/Row";
+import Col from "../blocks/Col";
 
 function Item(props) {
   const { name, id } = props.item;
@@ -36,14 +36,19 @@ function Item(props) {
   }
 
   useEffect(() => {
-    let fetch = async () => {
-      let result = await getItem(id);
+    let unmounted = false;
+    if (!unmounted) {
+      let fetch = async () => {
+        let result = await getItem(id);
 
-      return setItem(result);
+        return setItem(result);
+      };
+      fetch();
+    }
+
+    return () => {
+      unmounted = true;
     };
-    fetch();
-
-    return () => {};
   }, [id]);
 
   return (
@@ -55,9 +60,9 @@ function Item(props) {
       >
         <ConfirmationDiv
           confirm={confirm}
-          className="row mx-auto w-100 justify-content-center"
+          // className="row mx-auto w-100 justify-content-center"
         >
-          <div className="col-12 mt-2 mx-auto ">
+          <Col mt="2">
             <H2>Wanna remove item from the list?</H2>
             <Button danger className="m-3" onClick={handleDelete}>
               Yes
@@ -65,42 +70,35 @@ function Item(props) {
             <Button className="m-3" onClick={handleConfirm}>
               Keep
             </Button>
-          </div>
+          </Col>
         </ConfirmationDiv>
 
         <Content confirm={confirm}>
-          {/* <RouterLink to={`/item-details/${id}`}> */}
-          <div className="row mx-auto  w-100 p-2 justify-content-around">
-            <TitleDiv className="col-6 text-left">
-              <H2>🛒 {name} </H2>
-            </TitleDiv>
+          <Row>
+            <Col col="6" text="left">
+              <H2>{name}</H2>
+            </Col>
             {/* <h2>Id : {id}</h2> */}
-            <DueDiv className="col-6  my-auto text-right">
+            <Col col="6" text="right">
               <H4>
-                <DueSignal due={item.dueDate < today}>➔</DueSignal>{" "}
-                {item.dueDate}
+                <DueSignal due={item.dueDate < today}>➔</DueSignal>
+                🛒 {item.dueDate}
               </H4>
-            </DueDiv>
-          </div>
+            </Col>
+          </Row>
           {/* </RouterLink> */}
-          <div className="row mx-auto w-75 justify-content-around">
-            <DeleteDiv className="mt-2">
+          <Row w="75" mt="4" justify="around">
+            <DeleteDiv>
               <RouterLink to={`/item-details/${id}`}>
-                <Button className="mx-auto text-center" onClick={handleConfirm}>
-                  Check Details
-                </Button>
+                <Button onClick={handleConfirm}>Check Details</Button>
               </RouterLink>
             </DeleteDiv>
-            <DeleteDiv className="mt-2">
-              <Button
-                className="mx-auto text-center"
-                danger
-                onClick={handleConfirm}
-              >
+            <DeleteDiv>
+              <Button danger onClick={handleConfirm}>
                 Remove Item
               </Button>
             </DeleteDiv>
-          </div>
+          </Row>
         </Content>
       </ContainerItem>
     </>

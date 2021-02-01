@@ -14,9 +14,20 @@ import {
   DatePickerStyled,
   Img,
   H2,
-  Label,
+  DatePickerDiv,
 } from "../../utils/globalStyles";
-import { ButtonDiv, ProfileCard, ProfileDiv } from "./NewItemStyle";
+import {
+  ButtonDiv,
+  ProfileCard,
+  ProfileDiv,
+  ButtonRow,
+  Spacer,
+} from "./NewItemStyle";
+import Col from "../blocks/Col";
+import Row from "../blocks/Row";
+import Label from "../blocks/Label";
+import { COLORS } from "../../utils/styleConstants";
+import Loader from "../Loader/Loader";
 ////
 
 /////
@@ -24,17 +35,16 @@ import { ButtonDiv, ProfileCard, ProfileDiv } from "./NewItemStyle";
 function NewItem() {
   let history = useHistory();
   const [users, setUsers] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
   const [info, setInfo] = useState({
-    // name: "Name of your item",
     name: "",
-    // description: "Add some details to your item",
     description: "",
     assignedTo: { id: "", name: "" },
     dueDate: dateFormat(new Date(), "yyyy-mm-dd"),
   });
   const [startDate, setStartDate] = useState(new Date());
-
+  const [selected, setSelected] = useState([]);
   const { name, description, assignedTo, dueDate } = info;
 
   const isInvalid =
@@ -42,11 +52,16 @@ function NewItem() {
 
   useEffect(() => {
     let fetch = async () => {
-      let result = await getUsers();
-
+      setIsLoading(true);
+      setIsError(false);
+      try {
+        let result = await getUsers();
+        setUsers(result);
+      } catch (err) {
+        setIsError(true);
+      }
       // console.log(result);
-
-      return setUsers(result);
+      setIsLoading(false);
     };
     fetch();
 
@@ -67,29 +82,46 @@ function NewItem() {
     e.preventDefault();
 
     let post = async () => {
-      let response = await postItem(info);
+      setIsLoading(true);
+      setIsError(false);
+      try {
+        let response = await postItem(info);
+        // console.log(response);
+      } catch (err) {
+        setIsError(true);
+      }
 
-      console.log(response);
+      setIsLoading(false);
       history.push(`/`);
-      // return setUsers(result);
     };
     post();
   }
 
   function handlePerson(e) {
     e.preventDefault();
-    console.log(e.target);
-    let selectedUser = users.find((user) => user.id === e.target.id);
-    setInfo({ ...info, assignedTo: { ...selectedUser } });
-    console.log(selectedUser.id);
+    // let selectedUser = users.find((user) => user.id === e.target.id);
+    // setInfo({ ...info, assignedTo: { ...selectedUser } });
+
+    let selectedUsers = [...selected];
+    users.forEach((user, idx) => {
+      if (user.id === e.target.id) {
+        setInfo({ ...info, assignedTo: { ...user } });
+        selectedUsers[idx] = true;
+        setSelected(selectedUsers);
+        // console.log(selected);
+      } else {
+        selectedUsers[idx] = false;
+        setSelected(selectedUsers);
+      }
+    });
+
+    // console.log(info.assignedTo);
   }
 
   function handleClick(e) {
     e.preventDefault();
     history.push(`/`);
   }
-
-  ///////
 
   function getSteps() {
     return [
@@ -104,69 +136,71 @@ function NewItem() {
       case 0:
         return (
           <>
-            <Label
-              htmlFor="name"
-              className="row mx-auto justify-content-center w-100"
-            >
-              Name of the new product:
-            </Label>
-            <div className="row mx-auto justify-content-center w-100">
-              <Input
-                type="text"
-                name="name"
-                aria-label={name}
-                aria-required="true"
-                required
-                // placeholder={name}
-                onChange={handleChange}
-                value={name}
-              />
-            </div>
-            <Label
-              htmlFor="description"
-              className="row mx-auto justify-content-center w-100"
-            >
-              Details about the item:
-            </Label>
-            <div className="row mx-auto justify-content-center w-100">
-              <Textarea
-                required
-                type="text"
-                name="description"
-                aria-label={description}
-                aria-required="true"
-                // placeholder={description}
-                onChange={handleChange}
-                value={description}
-              />
-            </div>
+            <Row mt="5">
+              <Label htmlFor="name">Name of the new product:</Label>
+              <Row>
+                <Col>
+                  <Input
+                    type="text"
+                    name="name"
+                    aria-label={name}
+                    aria-required="true"
+                    required
+                    placeholder="..."
+                    onChange={handleChange}
+                    value={name}
+                  />
+                </Col>
+              </Row>
+            </Row>
+            <Row mt="4">
+              <Label htmlFor="description">Details about the item:</Label>
+              <Row>
+                <Col col="12" md="8">
+                  <Textarea
+                    required
+                    type="text"
+                    name="description"
+                    aria-label={description}
+                    aria-required="true"
+                    placeholder="..."
+                    onChange={handleChange}
+                    value={description}
+                  />
+                </Col>
+              </Row>
+            </Row>
           </>
         );
       case 1:
         return (
-          <div className="row mx-auto justify-content-center w-100">
+          <DatePickerDiv className="row mx-auto justify-content-center w-100">
+            <Label htmlFor="date">Due date of the product:</Label>
             <DatePickerStyled
+              name="date"
               selected={startDate}
               onChange={handleChangeDate}
             />
-          </div>
+          </DatePickerDiv>
         );
       case 2:
         return (
-          <ProfileDiv className="row mx-auto justify-content-center w-100">
-            <H1>Assign to someone the item:</H1>
+          <ProfileDiv className="row  mx-auto justify-content-center w-100">
+            <H2>Choose Assignee:</H2>
 
             {users.map((user, i) => (
               <ProfileCard
-                className="row mx-auto justify-content-center w-100"
+                className="row mx-auto justify-content-center w-75"
                 key={user.id}
                 id={user.id}
                 onClick={handlePerson}
+                selected={selected[i]}
               >
-                <H2 className="col-6 my-auto mx-auto" id={user.id}>
+                <H3 className="col-6 my-auto mx-auto" id={user.id}>
                   {user.name}
-                </H2>
+                </H3>
                 <Img
+                  selected={selected[i]}
                   className="my-auto mx-auto image"
                   id={user.id}
                   alt={user.name}
@@ -183,14 +217,15 @@ function NewItem() {
 
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
-  // const [alert, setAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
+
   const handleNext = (e) => {
     e.preventDefault();
-    // const isInvalid = [
-    //   name === "" && description === "",
-    //   dueDate === "",
-    //   assignedTo.id === "",
-    // ];
+    const isInvalid = [
+      name === "" && description === "",
+      dueDate === "",
+      assignedTo.id === "",
+    ];
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -203,27 +238,37 @@ function NewItem() {
   const handleReset = (e) => {
     e.preventDefault();
     setActiveStep(0);
+    setSelected([]);
+    setInfo({
+      name: "",
+      description: "",
+      assignedTo: { id: "", name: "" },
+      dueDate: dateFormat(new Date(), "yyyy-mm-dd"),
+    });
   };
   //////
 
   return (
-    <Container className="">
-      <div className="row mx-auto justify-content-center w-100">
-        <H1 main>New Item</H1>
-      </div>
-      <div className="row mx-auto w-100 justify-content-center">
-        <Form className="col-8 col-md-6  mx-auto" onSubmit={handleSubmit}>
-          <>
-            {/* {alert ? <h1>NOOOO</h1> : null} */}
-            {activeStep === steps.length ? (
-              <div>
-                <H3>All steps completed</H3>
-              </div>
-            ) : (
-              <div className="col-12">
+    <>
+      {" "}
+      <Loader color={COLORS.background} open={isLoading} />
+      <Container open={isLoading} className="justify-content-center">
+        <Row>
+          <H1 main>New Item</H1>
+        </Row>
+        <Row>
+          <Form className="col-11 col-md-6 mx-auto" onSubmit={handleSubmit}>
+            <>
+              {alert ? <h1>Please fill the empty fields</h1> : null}
+              <Col mt="3">
+                <H3 className="text-center mt-3">
+                  {`You are at step ${activeStep + 1} out of ${steps.length}`}
+                </H3>
+              </Col>
+              <>
                 {getStepContent(activeStep)}
-
-                <div className="row mx-auto w-100 justify-content-center">
+                <Spacer />
+                <ButtonRow className="row mx-auto w-100 justify-content-center">
                   <ButtonDiv className="col-3 mx-auto text-center">
                     <Button disabled={activeStep === 0} onClick={handleBack}>
                       Back
@@ -246,7 +291,7 @@ function NewItem() {
                           className="mx-3 "
                           disabled={isInvalid}
                         >
-                          Submit Item
+                          Submit
                         </Button>
                       </ButtonDiv>
                     </>
@@ -255,18 +300,19 @@ function NewItem() {
                       <Button onClick={handleNext}>Next</Button>
                     </ButtonDiv>
                   )}
-                </div>
-              </div>
-            )}
-          </>
-        </Form>
-      </div>
-      <div className="row mx-auto w-100 justify-content-center">
-        <Button special onClick={handleClick}>
-          Go to shopping list
-        </Button>
-      </div>
-    </Container>
+                </ButtonRow>
+              </>
+              {/* )} */}
+            </>
+          </Form>
+        </Row>
+        <Row mt="4">
+          <Button special onClick={handleClick}>
+            Go to shopping list
+          </Button>
+        </Row>
+      </Container>
+    </>
   );
 }
 
