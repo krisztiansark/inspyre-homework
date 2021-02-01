@@ -76,7 +76,10 @@ function EditItem(props) {
         color={COLORS.background}
         open={isUsersLoading || isPatchLoading}
       />
-      <Container open={isUsersLoading || isPatchLoading}>
+      <Container
+        data-testid="container"
+        open={isUsersLoading || isPatchLoading}
+      >
         <Row>
           <Col col="12" md="6">
             <H1 main>Edit Item</H1>

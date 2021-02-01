@@ -2,11 +2,20 @@
   "name": "insypre-shopping-list",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|svg)$": "./src/config/fileMock.js",
+      "\\.(css|scss)$": "identity-obj-proxy"
+    }
+  },
   "dependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.3",
     "@testing-library/user-event": "^12.6.2",
     "axios": "^0.21.1",
+    "babel-jest": "^26.6.3",
     "bootstrap-4-grid": "^3.4.0",
     "dateformat": "^4.5.0",
     "react": "^17.0.1",
@@ -15,13 +24,12 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
-    "uuid": "^8.3.2",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest --watchAll --collect-coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -41,5 +49,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/preset-react": "^7.12.10",
+    "jest": "^26.6.0"
   }
 }

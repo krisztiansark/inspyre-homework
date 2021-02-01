@@ -6,6 +6,7 @@ function Row(props) {
   return (
     <div
       style={styled}
+      data-testid="row-component"
       className={`row mx-auto  text-center
         mb-${mb ? mb : "auto"}
         mt-${mt ? mt : "auto"}

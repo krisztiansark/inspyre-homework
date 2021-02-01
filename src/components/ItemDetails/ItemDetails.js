@@ -49,7 +49,7 @@ function ItemDetails(props) {
               <Col text="left" col="12" md="6" mb="2">
                 <H1>{name}</H1>
               </Col>
-              <Col text="right" col="8" md="6" mb="2">
+              <Col text="right" my col="8" md="6" mb="2">
                 <H4>Due: {dueDate}</H4>
               </Col>
             </Row>

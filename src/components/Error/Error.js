@@ -4,12 +4,17 @@ function Error(props) {
   const { background, color, open } = props;
 
   return (
-    <Col color={color} open={open} background={background}>
+    <Col
+      color={color}
+      data-testid="main-col"
+      open={open}
+      background={background}
+    >
       <H4 open={open}>Whoops, there was some issue with your request.</H4>
       <br />
-      <H4 open={open}>Please refresh the page</H4>
-      <br />
-      <H4 open={open}>Here's a lemon: 🍋</H4>
+      <H4 data-testid="h4-lemon" open={open}>
+        Please refresh the page 🍋
+      </H4>
     </Col>
   );
 }

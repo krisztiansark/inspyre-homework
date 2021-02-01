@@ -54,14 +54,12 @@ export const Button = styled.button`
 
 export const H1 = styled.h1`
   display: inline-block;
-
+  font-size: 30px;
   font-size: ${({ main }) => main && "45px"};
   ${({ main }) =>
     main &&
     `
   border-bottom: 1px solid white;`}
-
-  display: inline-block;
 `;
 export const H2 = styled.h2`
   display: inline-block;

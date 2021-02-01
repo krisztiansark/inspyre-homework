@@ -1,15 +1,16 @@
 import React from "react";
 import { MEDIA } from "../../utils/styleConstants";
 import styled from "styled-components";
-import apple from "../../images/favicon.ico";
+// import apple from "../../images/favicon.ico";
+import apple from "../../images/apple.png";
 function Loader(props) {
   const { open, color } = props;
   //
 
   return (
-    <ColMin open={open}>
-      <LoaderDiv open={open} color={color}>
-        <Img src={apple} alt="loading-apple" />
+    <ColMin data-testid="loader-component" open={open}>
+      <LoaderDiv data-testid="loader-animation" open={open} color={color}>
+        <Img src={apple} data-testid="loader-image" alt="loading-apple" />
       </LoaderDiv>
     </ColMin>
   );

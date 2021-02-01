@@ -49,22 +49,26 @@ function Item(props) {
             <ConfirmationDiv confirm={confirm}>
               <Col>
                 <H2>Wanna remove item from the list?</H2>
+
                 <Button danger className="m-3" onClick={handleDelete}>
                   Yes
                 </Button>
+
                 <Button className="m-3" onClick={handleConfirm}>
                   Keep
                 </Button>
               </Col>
             </ConfirmationDiv>
 
-            <Content confirm={confirm}>
+            <Content data-testid="item-container" confirm={confirm}>
               <Row>
-                <Col col="12" md="6" textSm="center" text="left">
-                  <H1>{name}</H1>
+                <Col col="12" md="7" textSm="center" text="left">
+                  <H1 data-testid="item-name">
+                    {name.length > 13 ? `${name.slice(0, 11)}...` : name}
+                  </H1>
                 </Col>
 
-                <Col col="12" md="6" text="right">
+                <Col col="12" md="5" text="right">
                   <H3 anim>
                     <DueSignal due={item.dueDate < today}>➔</DueSignal>
                     {item.dueDate}
@@ -78,7 +82,11 @@ function Item(props) {
                   </RouterLink>
                 </DeleteDiv>
                 <DeleteDiv>
-                  <Button danger onClick={handleConfirm}>
+                  <Button
+                    data-testid="remove-button"
+                    danger
+                    onClick={handleConfirm}
+                  >
                     Remove Item
                   </Button>
                 </DeleteDiv>
