@@ -11,7 +11,7 @@ export const COLORS = {
   backgroundTwo: "rgba(37, 188, 205, 1)",
   backgroundForm: "rgba(64, 194, 198,1)",
   backgroundFormShadow: "rgba(84, 294, 218,.8)",
-  buttonBckg: "rgba(39, 148, 181, 1);",
+  buttonBckg: "rgba(34, 123, 178,1)",
 };
 
 export const MEDIA = {

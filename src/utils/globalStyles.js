@@ -18,10 +18,11 @@ const GlobalStyles = createGlobalStyle`
 }`;
 
 export const Container = styled.div`
-  /* border: 1px solid red; */
   height: auto;
   width: auto;
-
+  min-width: 250px;
+  max-width: 1000px;
+  margin: auto;
   ${({ open }) =>
     open
       ? `opacity:0; pointer-events:none;`
@@ -31,7 +32,6 @@ export const Container = styled.div`
 export const Button = styled.button`
   transition: all 300ms;
   color: ${COLORS.primary};
-  /* background: rgba(19, 148, 141, 1); */
   background: ${COLORS.buttonBckg};
   width: 100%;
   display: inline-block;
@@ -47,12 +47,14 @@ export const Button = styled.button`
   padding: 5px 15px 5px 15px;
   cursor: pointer;
   &:hover {
-    opacity: 0.8;
+    opacity: ${({ special }) => (special ? "1" : "0.8")};
+    transform: ${({ special }) => (special ? `scale(1.05)` : "none")};
   }
 `;
 
 export const H1 = styled.h1`
   display: inline-block;
+
   font-size: ${({ main }) => main && "45px"};
   ${({ main }) =>
     main &&
@@ -63,10 +65,6 @@ export const H1 = styled.h1`
 `;
 export const H2 = styled.h2`
   display: inline-block;
-  /* border-bottom: 1px solid white; */
-  /* border-radius: 5px;
-  padding-left: 5px;
-  border-left: 1px solid white; */
 `;
 export const H3 = styled.h3`
   display: inline-block;
@@ -143,9 +141,73 @@ export const Select = styled.select`
 
 export const Form = styled.form`
   background: ${COLORS.backgroundForm};
-  min-height: 400px;
+  /* min-height: 400px; */
   border-radius: 10px;
   margin: 10% 0 0 0;
+
+  @keyframes change {
+    0% {
+      opacity: 0;
+      transform: translateX(-140px);
+    }
+    50% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    98% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes changee {
+    0% {
+      opacity: 0;
+      transform: translateX(-140px);
+    }
+    50% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    98% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  @keyframes changeee {
+    0% {
+      opacity: 0;
+      transform: translateX(-140px);
+    }
+    50% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    98% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0px);
+    }
+  }
+
+  ${({ change }) =>
+    (change === 0 && `  animation: change 0.4s ease-in;`) ||
+    (change === 1 && `  animation: changee 0.4s ease-in;`) ||
+    (change === 2 && `  animation: changeee 0.4s ease-in;`)}
+
+  animation-fill-mode: forwards;
 `;
 
 export const DatePickerStyled = styled(DatePicker)`
@@ -184,26 +246,30 @@ export const DatePickerDiv = styled.div`
 `;
 
 export const Img = styled.img`
-  width: 80px;
-  height: 80px;
+  width: 75px;
+  height: 75px;
+  transform: scale(0.9);
+  transition: all 300ms;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid white;
   ${({ sm, lg }) =>
     (sm &&
       `
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
+  padding:0;
 `) ||
     (lg &&
       `    
-  width: 100px;
-  height: 100px;`)}
+  width: 90px;
+  height: 90px;`)}
   border-radius: 50%;
-  padding: 5px;
   margin: auto 0 auto 0;
-  filter: ${({ selected }) => (selected ? "grayscale(0%)" : "grayscale(80%)")};
+  filter: ${({ selected }) => (selected ? "grayscale(0%)" : "grayscale(90%)")};
+  transform: ${({ selected }) => (selected ? "scale(1)" : "scale(.9)")};
 `;
 
-export const Label = styled.label`
-  /* margin: 5% 0 0 0; */
-`;
+export const Label = styled.label``;
 
 export default GlobalStyles;

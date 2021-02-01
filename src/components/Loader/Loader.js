@@ -1,7 +1,7 @@
 import React from "react";
-
+import { MEDIA } from "../../utils/styleConstants";
 import styled from "styled-components";
-import apple from "../../favicon.ico";
+import apple from "../../images/favicon.ico";
 function Loader(props) {
   const { open, color } = props;
   //
@@ -24,6 +24,7 @@ export const ColMin = styled.div`
   height: 100%;
   z-index: 99;
   pointer-events: none;
+  min-width: 300px;
 `;
 
 export const LoaderDiv = styled.div`
@@ -36,6 +37,14 @@ export const LoaderDiv = styled.div`
   width: 80px;
   height: 80px;
   position: absolute;
+
+  @media (max-width: ${MEDIA.sm}) {
+    top: 45%;
+    left: 43%;
+    transform: translate(-50%, -50%);
+    width: 60px;
+    height: 60px;
+  }
 
   animation: spin 1.5s linear infinite;
 
@@ -57,6 +66,12 @@ export const Img = styled.img`
   display: block;
   position: relative;
   animation: apple 1.5s linear infinite;
+
+  @media (max-width: ${MEDIA.sm}) {
+    margin: 17% auto auto auto;
+    width: 20px;
+  }
+
   @keyframes apple {
     0% {
       transform: scale(1);

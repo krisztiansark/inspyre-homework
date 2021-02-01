@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "react-datepicker/dist/react-datepicker.css";
 import "./index.css";
 import App from "../src/components/App/App";
 import reportWebVitals from "./reportWebVitals";

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../utils/globalStyles";
-import { MEDIA, COLORS } from "../../utils/styleConstants";
+import { COLORS } from "../../utils/styleConstants";
 
 export const ContainerItem = styled(Container)`
   transition: all 300ms;

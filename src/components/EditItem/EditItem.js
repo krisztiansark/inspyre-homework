@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import "react-datepicker/dist/react-datepicker.css";
-import { getUsers, patchItems } from "../../utils/apiUtils";
+
 import dateFormat from "dateformat";
 import {
   Button,
@@ -15,40 +13,34 @@ import {
   DatePickerStyled,
   Img,
   Select,
+  P,
 } from "../../utils/globalStyles";
 import Row from "../blocks/Row";
 import Col from "../blocks/Col";
 import Label from "../blocks/Label";
 import { COLORS } from "../../utils/styleConstants";
 import Loader from "../Loader/Loader";
-
+import PatchHook from "../../hooks/patchHook";
+import GetUsersHook from "../../hooks/getUsersHook";
+import Error from "../Error/Error";
 function EditItem(props) {
   let history = useHistory();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [info, setInfo] = useState(props.location.state);
-  const [startDate, setStartDate] = useState(new Date(info.dueDate));
-  const [users, setUsers] = useState([]);
 
   const { id } = props.match.params;
+
+  const [users, isUsersLoading, isUsersError] = GetUsersHook(id);
+
+  const [info, setInfo, isPatchLoading, isPatchError, patchHook] = PatchHook(
+    id,
+    props.location.state
+  );
+
   const { name, description, assignedTo } = info;
-
-  useEffect(() => {
-    let fetch = async () => {
-      setIsLoading(true);
-      let result = await getUsers();
-
-      setUsers(result);
-      setIsLoading(false);
-    };
-
-    fetch();
-
-    return () => {};
-  }, [id]);
+  const [startDate, setStartDate] = useState(new Date(info.dueDate));
 
   function handleChange(e) {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+    if (e.target.value.length <= 150)
+      setInfo({ ...info, [e.target.name]: e.target.value });
   }
   function handleChangeDate(e) {
     setInfo({ ...info, dueDate: dateFormat(e, "yyyy-mm-dd") });
@@ -57,14 +49,8 @@ function EditItem(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    let patch = async () => {
-      let response = await patchItems(id, info);
 
-      setInfo({ ...info, ...response });
-
-      history.push(`/item-details/${id}`);
-    };
-    patch();
+    patchHook(id, info);
   }
 
   function handlePerson(e) {
@@ -85,35 +71,42 @@ function EditItem(props) {
 
   return (
     <>
-      <Loader color={COLORS.background} open={isLoading} />
-      <Container open={isLoading}>
+      <Error open={isUsersError || isPatchError} background={COLORS.danger} />
+      <Loader
+        color={COLORS.background}
+        open={isUsersLoading || isPatchLoading}
+      />
+      <Container open={isUsersLoading || isPatchLoading}>
         <Row>
           <Col col="12" md="6">
             <H1 main>Edit Item</H1>
 
             <Form onSubmit={handleSubmit}>
-              <Row mt="2" mb="3">
-                <Label mt="3" htmlFor="select">
-                  Choose the assignee:
-                </Label>
-                <Col col="6">
-                  <Select
-                    name="select"
-                    value={assignedTo.id}
-                    onChange={handlePerson}
-                  >
-                    {users.map((user, i) => (
-                      <option key={user.id} value={user.id}>
-                        {user.name}
-                      </option>
-                    ))}
-                  </Select>
-                </Col>
-                <Col col="6">
-                  <Img
-                    alt={assignedTo.name}
-                    src={assignedTo.profilePictureUrl}
-                  />
+              <Row w="100" mt="2" mb="3">
+                <Col col="12">
+                  <Label mt="3" htmlFor="select">
+                    Choose the assignee:
+                  </Label>
+                  <Col mt="1" col="12" md="6">
+                    <Select
+                      name="select"
+                      value={assignedTo.id}
+                      onChange={handlePerson}
+                    >
+                      {users.map((user, i) => (
+                        <option key={user.id} value={user.id}>
+                          {user.name}
+                        </option>
+                      ))}
+                    </Select>
+                  </Col>
+                  <Col mt="2" col="6">
+                    <Img
+                      sm
+                      alt={assignedTo.name}
+                      src={assignedTo.profilePictureUrl}
+                    />
+                  </Col>
                 </Col>
               </Row>
               <Label htmlFor="name">Edit item name:</Label>
@@ -129,8 +122,8 @@ function EditItem(props) {
                 </Col>
               </Row>
               <Label htmlFor="description">Edit item description:</Label>
-              <Row>
-                <Col col="11" md="10" mb="3" mt="2">
+              <Row mb="3" mt="2">
+                <Col col="11" md="10">
                   <Textarea
                     type="text"
                     name="description"
@@ -139,6 +132,7 @@ function EditItem(props) {
                     value={description}
                   />
                 </Col>
+                <P>Used {description.length} characters out of 150.</P>
               </Row>
 
               <Label htmlFor="date">Edit due date:</Label>
@@ -154,17 +148,27 @@ function EditItem(props) {
                   button.
                 </H3>
               </Col>
-              <Row mb="2" mt="4">
-                <Col col="4" md="4">
-                  <Button onClick={handleBack}>Back</Button>
-                </Col>
-                <Col col="4" md="4">
-                  <Button type="submit">Submit</Button>
-                </Col>
+
+              <Row
+                w="75"
+                styled={{
+                  borderTop: `3px solid ${COLORS.border}`,
+                }}
+                mb="2"
+                mt="4"
+              >
+                <Row mt="3" mb="2">
+                  <Col col="6" md="4">
+                    <Button onClick={handleBack}>Back</Button>
+                  </Col>
+                  <Col col="6" md="4">
+                    <Button type="submit">Submit</Button>
+                  </Col>
+                </Row>
               </Row>
             </Form>
 
-            <Row mt="4">
+            <Row mb="3" mt="4">
               <Button special onClick={handleHome}>
                 Go to shopping list
               </Button>

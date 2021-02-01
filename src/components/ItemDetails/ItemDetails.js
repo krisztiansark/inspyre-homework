@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useHistory, Link } from "react-router-dom";
-import { getItem } from "../../utils/apiUtils";
 import {
   Button,
   H1,
@@ -17,55 +16,21 @@ import Row from "../blocks/Row";
 import dateFormat from "dateformat";
 import Col from "../blocks/Col";
 import Loader from "../Loader/Loader";
-
+import GetItemHook from "../../hooks/getItemHook";
+import Error from "../Error/Error";
 function ItemDetails(props) {
   let history = useHistory();
   const { id } = props.match.params;
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [item, isLoading, isError] = GetItemHook(id);
 
-  const [result, setResult] = useState({
-    name: "",
-    dueDate: "",
-    description: "",
-    assignedTo: "",
-    createdAt: "",
-    updatedAt: "",
-  });
-
-  const {
-    name,
-    dueDate,
-    description,
-    assignedTo,
-    createdAt,
-    updatedAt,
-  } = result;
-
+  const { name, dueDate, description, assignedTo, createdAt, updatedAt } = item;
   function handleClick() {
     history.push("/");
   }
 
-  useEffect(() => {
-    let fetch = async () => {
-      setIsError(false);
-      setIsLoading(true);
-      try {
-        let result = await getItem(id);
-        console.log(result);
-        setResult(result);
-      } catch (err) {
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    fetch();
-
-    return () => {};
-  }, [id]);
-
   return (
     <>
+      <Error open={isError} background={COLORS.danger} />
       <Loader color={COLORS.background} open={isLoading} />
       <Container open={isLoading} className="container-fuild">
         <Row>
@@ -92,7 +57,7 @@ function ItemDetails(props) {
               <Col mxOff col="6" md="4" text="left">
                 <H5>Created at:</H5>
               </Col>
-              {/* </div> */}
+
               <Col mxOff col="6" md="4" text="right">
                 <H5>Updated at:</H5>
               </Col>
@@ -112,8 +77,6 @@ function ItemDetails(props) {
               </ColFancy>
             </Row>
             <Row justify="center">
-              {/* <h2>ID: {assignedTo.id}</h2> */}
-
               <ColFancy bottom className="col-8 col-md-5 my-auto">
                 <Row mb={2}>
                   <H3>{assignedTo.name}</H3>
@@ -147,7 +110,7 @@ function ItemDetails(props) {
                   to={{
                     pathname: `/edit-item/${id}`,
                     state: {
-                      ...result,
+                      ...item,
                     },
                   }}
                 >

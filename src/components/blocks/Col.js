@@ -1,7 +1,7 @@
 import React from "react";
 
 function Col(props) {
-  const { text, mb, mt, styled, col, md, lg, mxOff } = props;
+  const { text, mb, mt, styled, col, md, lg, mxOff, textSm } = props;
 
   return (
     <div
@@ -12,7 +12,9 @@ function Col(props) {
       ${lg && ` col-lg-${lg}`}
         mb-${mb ? mb : "auto"}
         mt-${mt ? mt : "auto"}
-        text-${text ? text : "center"}`}
+        text-md-${text ? text : "center"}
+        text-sm-${textSm ? textSm : "center"}
+        `}
     >
       {props.children}
     </div>

@@ -17,6 +17,36 @@ export const ContainerItem = styled(Container)`
   transition: all 300ms;
 
   display: ${({ deleted }) => (deleted ? "none" : "block")};
+
+  /* ${({ deleted }) =>
+    deleted &&
+    `    
+      animation: deleted 0.5s normal;
+  animation-fill-mode: forwards;
+  @keyframes deleted {
+    0% {
+      display: none;
+      opacity: 1;
+      transform: translateX(0px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateX(-100px);
+    }
+    98% {
+      opacity: 0;
+      transform: translateX(-140px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateX(-140px);
+      display: none;
+    }
+  }
+
+   pointer-events: none;
+ 
+  `}; */
 `;
 export const Content = styled.div`
   ${({ confirm }) =>
@@ -31,17 +61,7 @@ export const Content = styled.div`
  pointer-events:none; `};
 `;
 
-// export const TitleDiv = styled.div`
-//   /* border: 1px solid black; */
-// `;
-
-// export const DueDiv = styled.div`
-//   /* border: 1px solid black; */
-// `;
-
-export const DeleteDiv = styled.div`
-  /* border: 1px solid black; */
-`;
+export const DeleteDiv = styled.div``;
 
 export const DueSignal = styled.div`
   display: inline-block;
@@ -73,6 +93,7 @@ transform: translateX(0px) scale(1);
 
 export const ConfirmationDiv = styled.div`
   position: absolute;
+  top: 0;
   width: 100%;
 
   text-align: center;
@@ -89,5 +110,10 @@ export const ConfirmationDiv = styled.div`
       : `
         transition: all 200ms;
       opacity:0;
+
  pointer-events:none; `}
+  margin-top: 2%;
+  @media (max-width: ${MEDIA.sm}) {
+    margin-top: 2.5%;
+  }
 `;

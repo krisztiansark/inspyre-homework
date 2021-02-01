@@ -1,46 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { getItems } from "../../utils/apiUtils";
+import React from "react";
 import Item from "./Item";
 import { Link } from "react-router-dom";
 import { Button, H1, H2, Container } from "../../utils/globalStyles";
 import Row from "../blocks/Row";
 import Col from "../blocks/Col";
 import Loader from "../Loader/Loader";
+import Error from "../Error/Error";
 import { COLORS } from "../../utils/styleConstants";
+import GetHook from "../../hooks/getHook";
 //////
 
 //////
 function Index() {
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
-  useEffect(() => {
-    let fetch = async () => {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        let result = await getItems();
-
-        console.log(result);
-        setResults(result);
-      } catch (err) {
-        setIsError(true);
-      }
-      setIsLoading(false);
-    };
-    fetch();
-
-    /// SORRY THE SERVER FAILED TO LOAD SO WE ARE USING DATA FROM YOUR LOCAL MACHINE
-    return () => {};
-  }, []);
+  const [results, isLoading, isError] = GetHook();
 
   const items = results.map((item, idx) => {
     return <Item odd={idx} key={item.id} item={item} />;
   });
 
   return (
-    // <Loader open={isLoading} />
     <>
+      <Error open={isError} background={COLORS.danger} />
       <Loader color={COLORS.background} open={isLoading} />
       <Container open={isLoading} className="">
         <Row>
@@ -53,22 +33,17 @@ function Index() {
             <H2>Today's date is {new Date().toDateString()}</H2>
           </Col>
         </Row>
-        {/* {isLoading ? (
-        <Loader color={COLORS.background} open={isLoading} />
-      ) : (
-        <> */}
+
         <Row>
           <Col col="12">
             <Link style={{ textDecoration: "none" }} to={"/new-item"}>
-              <Button special>New Item</Button>
+              <Button special>Add New Item</Button>
             </Link>
           </Col>
         </Row>
-        <Container className="container-fluid mt-4 justify-content-center">
+        <Container className="row mt-5 justify-content-center">
           {items}
         </Container>
-        {/* </> */}
-        {/* )} */}
       </Container>
     </>
   );

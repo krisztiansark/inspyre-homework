@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
-import { getUsers, postItem } from "../../utils/apiUtils";
+
 import dateFormat from "dateformat";
 import {
   Button,
@@ -14,29 +14,27 @@ import {
   DatePickerStyled,
   Img,
   H2,
+  P,
   DatePickerDiv,
 } from "../../utils/globalStyles";
-import {
-  ButtonDiv,
-  ProfileCard,
-  ProfileDiv,
-  ButtonRow,
-  Spacer,
-} from "./NewItemStyle";
+import { ButtonDiv, ProfileCard, ProfileDiv, ButtonRow } from "./NewItemStyle";
 import Col from "../blocks/Col";
 import Row from "../blocks/Row";
 import Label from "../blocks/Label";
 import { COLORS } from "../../utils/styleConstants";
 import Loader from "../Loader/Loader";
+import GetUsersHook from "../../hooks/getUsersHook";
+import PostHook from "../../hooks/postHook";
+import Error from "../Error/Error";
 ////
 
 /////
 
 function NewItem() {
   let history = useHistory();
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [users, isUsersLoading, isUsersError] = GetUsersHook();
+  const [response, isPostLoading, isPostError, postRequest] = PostHook();
+  const [activeStep, setActiveStep] = useState(0);
   const [info, setInfo] = useState({
     name: "",
     description: "",
@@ -50,27 +48,17 @@ function NewItem() {
   const isInvalid =
     name === "" || description === "" || assignedTo.id === "" || dueDate === "";
 
-  useEffect(() => {
-    let fetch = async () => {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        let result = await getUsers();
-        setUsers(result);
-      } catch (err) {
-        setIsError(true);
-      }
-      // console.log(result);
-      setIsLoading(false);
-    };
-    fetch();
-
-    return () => {};
-  }, []);
+  const isInvalidEach = [
+    name.length <= 0 && description.length <= 0,
+    dueDate === "",
+    assignedTo.id === "",
+  ];
 
   function handleChange(e) {
     e.preventDefault();
-    setInfo({ ...info, [e.target.name]: e.target.value });
+
+    if (e.target.value.length <= 150)
+      setInfo({ ...info, [e.target.name]: e.target.value });
   }
 
   function handleChangeDate(e) {
@@ -81,26 +69,11 @@ function NewItem() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    let post = async () => {
-      setIsLoading(true);
-      setIsError(false);
-      try {
-        let response = await postItem(info);
-        // console.log(response);
-      } catch (err) {
-        setIsError(true);
-      }
-
-      setIsLoading(false);
-      history.push(`/`);
-    };
-    post();
+    postRequest(info);
   }
 
   function handlePerson(e) {
     e.preventDefault();
-    // let selectedUser = users.find((user) => user.id === e.target.id);
-    // setInfo({ ...info, assignedTo: { ...selectedUser } });
 
     let selectedUsers = [...selected];
     users.forEach((user, idx) => {
@@ -108,14 +81,11 @@ function NewItem() {
         setInfo({ ...info, assignedTo: { ...user } });
         selectedUsers[idx] = true;
         setSelected(selectedUsers);
-        // console.log(selected);
       } else {
         selectedUsers[idx] = false;
         setSelected(selectedUsers);
       }
     });
-
-    // console.log(info.assignedTo);
   }
 
   function handleClick(e) {
@@ -130,14 +100,16 @@ function NewItem() {
       "Select user",
     ];
   }
+  const steps = getSteps();
 
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
         return (
           <>
-            <Row mt="5">
-              <Label htmlFor="name">Name of the new product:</Label>
+            <H2>Basic details:</H2>
+            <Row mt="4">
+              <Label htmlFor="name">Name of item:</Label>
               <Row>
                 <Col>
                   <Input
@@ -169,63 +141,61 @@ function NewItem() {
                   />
                 </Col>
               </Row>
+              <P>Used {description.length} characters out of 150.</P>
             </Row>
           </>
         );
       case 1:
         return (
-          <DatePickerDiv className="row mx-auto justify-content-center w-100">
-            <Label htmlFor="date">Due date of the product:</Label>
-            <DatePickerStyled
-              name="date"
-              selected={startDate}
-              onChange={handleChangeDate}
-            />
-          </DatePickerDiv>
+          <>
+            <H2>Pick a date:</H2>
+            <DatePickerDiv className="row mx-auto justify-content-center w-100">
+              <Label htmlFor="date">Due date of the product:</Label>
+              <DatePickerStyled
+                name="date"
+                selected={startDate}
+                onChange={handleChangeDate}
+              />
+            </DatePickerDiv>
+          </>
         );
       case 2:
         return (
-          <ProfileDiv className="row  mx-auto justify-content-center w-100">
+          <>
             <H2>Choose Assignee:</H2>
-
-            {users.map((user, i) => (
-              <ProfileCard
-                className="row mx-auto justify-content-center w-75"
-                key={user.id}
-                id={user.id}
-                onClick={handlePerson}
-                selected={selected[i]}
-              >
-                <H3 className="col-6 my-auto mx-auto" id={user.id}>
-                  {user.name}
-                </H3>
-                <Img
-                  selected={selected[i]}
-                  className="my-auto mx-auto image"
+            <ProfileDiv className="row  mx-auto justify-content-center w-100">
+              {users.map((user, i) => (
+                <ProfileCard
+                  className="row mx-auto justify-content-center w-75"
+                  key={user.id}
                   id={user.id}
-                  alt={user.name}
-                  src={user.profilePictureUrl}
-                />
-              </ProfileCard>
-            ))}
-          </ProfileDiv>
+                  onClick={handlePerson}
+                  selected={selected[i]}
+                >
+                  <H3 className="col-6 my-auto mx-auto" id={user.id}>
+                    {user.name}
+                  </H3>
+                  <Img
+                    selected={selected[i]}
+                    className="my-auto mx-auto image"
+                    id={user.id}
+                    alt={user.name}
+                    src={user.profilePictureUrl}
+                  />
+                </ProfileCard>
+              ))}
+            </ProfileDiv>
+          </>
         );
       default:
         return "Unknown stepIndex";
     }
   }
 
-  const [activeStep, setActiveStep] = useState(0);
-  const steps = getSteps();
-  const [alert, setAlert] = useState(false);
+  // const [alert, setAlert] = useState(false);
 
   const handleNext = (e) => {
     e.preventDefault();
-    const isInvalid = [
-      name === "" && description === "",
-      dueDate === "",
-      assignedTo.id === "",
-    ];
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -250,63 +220,101 @@ function NewItem() {
 
   return (
     <>
-      {" "}
-      <Loader color={COLORS.background} open={isLoading} />
-      <Container open={isLoading} className="justify-content-center">
+      <Error open={isUsersError || isPostError} background={COLORS.danger} />
+      <Loader
+        color={COLORS.background}
+        open={isUsersLoading || isPostLoading}
+      />
+      <Container
+        open={isUsersLoading || isPostLoading}
+        className="justify-content-center"
+      >
         <Row>
           <H1 main>New Item</H1>
         </Row>
         <Row>
-          <Form className="col-11 col-md-6 mx-auto" onSubmit={handleSubmit}>
+          <Form
+            change={activeStep}
+            className="col-11 col-md-6 mx-auto"
+            onSubmit={handleSubmit}
+          >
             <>
               {alert ? <h1>Please fill the empty fields</h1> : null}
               <Col mt="3">
-                <H3 className="text-center mt-3">
+                <H3
+                  style={{ borderBottom: `3px solid ${COLORS.border}` }}
+                  className="text-center mt-3"
+                >
                   {`You are at step ${activeStep + 1} out of ${steps.length}`}
                 </H3>
               </Col>
               <>
                 {getStepContent(activeStep)}
-                <Spacer />
-                <ButtonRow className="row mx-auto w-100 justify-content-center">
-                  <ButtonDiv className="col-3 mx-auto text-center">
-                    <Button disabled={activeStep === 0} onClick={handleBack}>
-                      Back
-                    </Button>
-                  </ButtonDiv>
-                  {activeStep === steps.length - 1 ? (
-                    <>
-                      <ButtonDiv className="col-3 text-center mx-auto">
-                        <Button
-                          danger
-                          className="mx-3 text-center"
-                          onClick={handleReset}
-                        >
-                          Reset
-                        </Button>
-                      </ButtonDiv>{" "}
-                      <ButtonDiv className="col-3 text-center mx-auto">
-                        <Button
-                          type="submit"
-                          className="mx-3 "
-                          disabled={isInvalid}
-                        >
-                          Submit
-                        </Button>
-                      </ButtonDiv>
-                    </>
-                  ) : (
-                    <ButtonDiv className="col-3 mx-auto text-center">
-                      <Button onClick={handleNext}>Next</Button>
-                    </ButtonDiv>
-                  )}
-                </ButtonRow>
+
+                <Row
+                  mt="5"
+                  mb="1"
+                  styled={{
+                    borderTop: `3px solid ${COLORS.border}`,
+                  }}
+                >
+                  <ButtonRow className="row mx-auto w-100 ">
+                    {activeStep === steps.length - 1 ? (
+                      <>
+                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
+                          <Button
+                            disabled={activeStep === 0}
+                            onClick={handleBack}
+                          >
+                            Back
+                          </Button>
+                        </ButtonDiv>
+                        <ButtonDiv className="col-6 col-md-3 text-center mx-auto">
+                          <Button
+                            danger
+                            className="mx-3 text-center"
+                            onClick={handleReset}
+                          >
+                            Reset
+                          </Button>
+                        </ButtonDiv>{" "}
+                        <ButtonDiv className="col-6 col-md-3 text-center mx-auto">
+                          <Button
+                            type="submit"
+                            className="mx-3 "
+                            disabled={isInvalid}
+                          >
+                            Submit
+                          </Button>
+                        </ButtonDiv>
+                      </>
+                    ) : (
+                      <>
+                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
+                          <Button
+                            disabled={activeStep === 0}
+                            onClick={handleBack}
+                          >
+                            Back
+                          </Button>
+                        </ButtonDiv>
+                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
+                          <Button
+                            disabled={isInvalidEach[activeStep]}
+                            onClick={handleNext}
+                          >
+                            Next
+                          </Button>
+                        </ButtonDiv>
+                      </>
+                    )}
+                  </ButtonRow>
+                </Row>
               </>
-              {/* )} */}
             </>
           </Form>
         </Row>
-        <Row mt="4">
+        <Row mt="4" mb="3">
           <Button special onClick={handleClick}>
             Go to shopping list
           </Button>
