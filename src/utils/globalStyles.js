@@ -1,7 +1,7 @@
 import styled, { createGlobalStyle } from "styled-components";
 import { Link } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { MEDIA, COLORS } from "./styleConstants";
+import { MEDIA, COLORS, SHADOW } from "./styleConstants";
 
 const GlobalStyles = createGlobalStyle`
 
@@ -23,6 +23,7 @@ export const Container = styled.div`
   min-width: 250px;
   max-width: 1000px;
   margin: auto;
+  opacity: 0;
   ${({ open }) =>
     open
       ? `opacity:0; pointer-events:none;`
@@ -40,6 +41,7 @@ export const Button = styled.button`
   background: ${({ bckg }) => bckg};
   background: ${({ danger }) => danger && COLORS.danger};
   background: ${({ special }) => special && `${COLORS.secondary}`};
+
   ${({ disabled }) => disabled && `background: grey; pointer-events:none;`}
   border: 0;
   margin: auto;
@@ -49,17 +51,19 @@ export const Button = styled.button`
   &:hover {
     opacity: ${({ special }) => (special ? "1" : "0.8")};
     transform: ${({ special }) => (special ? `scale(1.05)` : "none")};
+    box-shadow: ${({ special }) => special && SHADOW.white};
   }
 `;
 
 export const H1 = styled.h1`
   display: inline-block;
   font-size: 30px;
+  padding: ${({ main }) => main && "0 5px 0 5px"};
   font-size: ${({ main }) => main && "45px"};
   ${({ main }) =>
     main &&
     `
-  border-bottom: 1px solid white;`}
+  border-bottom: 2px solid rgba(255,255,255,0.5);`}
 `;
 export const H2 = styled.h2`
   display: inline-block;
@@ -67,6 +71,8 @@ export const H2 = styled.h2`
 export const H3 = styled.h3`
   display: inline-block;
   margin: auto 0 auto 0 !important;
+  font-style: ${({ italic }) => italic && "italic"};
+  pointer-events: ${({ noPointer }) => (noPointer ? `none` : "default")};
 `;
 export const H4 = styled.h4`
   display: inline-block;
@@ -141,8 +147,8 @@ export const Form = styled.form`
   background: ${COLORS.backgroundForm};
   /* min-height: 400px; */
   border-radius: 10px;
-  margin: 10% 0 0 0;
-
+  margin: 5% 0 0 0;
+  box-shadow: ${SHADOW.white};
   @keyframes change {
     0% {
       opacity: 0;
@@ -249,8 +255,8 @@ export const Img = styled.img`
   transform: scale(0.9);
   transition: all 300ms;
   display: inline-block;
-  vertical-align: middle;
   border: 1px solid white;
+  pointer-events: ${({ noPointer }) => (noPointer ? `none` : "default")};
   ${({ sm, lg }) =>
     (sm &&
       `

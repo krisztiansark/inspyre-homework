@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Container } from "../../utils/globalStyles";
-import { COLORS } from "../../utils/styleConstants";
+import { COLORS, SHADOW } from "../../utils/styleConstants";
 
 export const ContainerItem = styled(Container)`
   transition: all 300ms;
@@ -12,6 +12,7 @@ export const ContainerItem = styled(Container)`
   height: auto;
   transition: all 300ms;
   margin: 10% 0 0 0;
+  box-shadow: ${SHADOW.white};
 `;
 
 export const Description = styled.div`

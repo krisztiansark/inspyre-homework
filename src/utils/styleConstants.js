@@ -19,3 +19,7 @@ export const MEDIA = {
   md: "576px",
   lg: "768px",
 };
+
+export const SHADOW = {
+  white: "0px 0px 8px 1px rgba(255,255,255,0.9);",
+};

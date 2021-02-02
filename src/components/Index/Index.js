@@ -14,9 +14,22 @@ import GetHook from "../../hooks/getHook";
 function Index() {
   const [results, isLoading, isError] = GetHook();
 
-  const items = results.map((item, idx) => {
-    return <Item odd={idx} key={item.id} item={item} />;
-  });
+  function fetchedResults() {
+    return results.length > 0 ? (
+      results.map((item, idx) => {
+        return <Item odd={idx} key={item.id} item={item} />;
+      })
+    ) : (
+      <>
+        <Row>
+          <H1> No items. Please add one to the list!</H1>
+        </Row>
+        <Row>
+          <H1>🍇🍈🍉🛒</H1>
+        </Row>
+      </>
+    );
+  }
 
   return (
     <>
@@ -42,7 +55,7 @@ function Index() {
           </Col>
         </Row>
         <Container className="row mt-5 justify-content-center">
-          {items}
+          {fetchedResults()}
         </Container>
       </Container>
     </>

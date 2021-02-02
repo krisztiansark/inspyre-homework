@@ -36,7 +36,7 @@ export const DeleteDiv = styled.div``;
 export const DueSignal = styled.div`
   display: inline-block;
   position: absolute;
-  margin-left: -20px;
+  margin-left: -22px;
 
   ${({ due }) =>
     due
@@ -50,7 +50,7 @@ export const DueSignal = styled.div`
   }
 50% {
     opacity:1;
-transform: translateX(0px) scale(1);
+transform: translateX(0px) scale(1.2);
 }
   100% {
  opacity:0.4;

@@ -49,10 +49,11 @@ function NewItem() {
     name === "" || description === "" || assignedTo.id === "" || dueDate === "";
 
   const isInvalidEach = [
-    name.length <= 0 && description.length <= 0,
+    name === "" || description === "",
     dueDate === "",
     assignedTo.id === "",
   ];
+  const steps = 3;
 
   function handleChange(e) {
     e.preventDefault();
@@ -74,6 +75,7 @@ function NewItem() {
 
   function handlePerson(e) {
     e.preventDefault();
+    console.log(e.target);
 
     let selectedUsers = [...selected];
     users.forEach((user, idx) => {
@@ -92,107 +94,6 @@ function NewItem() {
     e.preventDefault();
     history.push(`/`);
   }
-
-  function getSteps() {
-    return [
-      "name and description of the item",
-      "due date of the item",
-      "Select user",
-    ];
-  }
-  const steps = getSteps();
-
-  function getStepContent(stepIndex) {
-    switch (stepIndex) {
-      case 0:
-        return (
-          <>
-            <H2>Basic details:</H2>
-            <Row mt="4">
-              <Label htmlFor="name">Name of item:</Label>
-              <Row>
-                <Col>
-                  <Input
-                    type="text"
-                    name="name"
-                    aria-label={name}
-                    aria-required="true"
-                    required
-                    placeholder="..."
-                    onChange={handleChange}
-                    value={name}
-                  />
-                </Col>
-              </Row>
-            </Row>
-            <Row mt="4">
-              <Label htmlFor="description">Details about the item:</Label>
-              <Row>
-                <Col col="12" md="8">
-                  <Textarea
-                    required
-                    type="text"
-                    name="description"
-                    aria-label={description}
-                    aria-required="true"
-                    placeholder="..."
-                    onChange={handleChange}
-                    value={description}
-                  />
-                </Col>
-              </Row>
-              <P>Used {description.length} characters out of 150.</P>
-            </Row>
-          </>
-        );
-      case 1:
-        return (
-          <>
-            <H2>Pick a date:</H2>
-            <DatePickerDiv className="row mx-auto justify-content-center w-100">
-              <Label htmlFor="date">Due date of the product:</Label>
-              <DatePickerStyled
-                name="date"
-                selected={startDate}
-                onChange={handleChangeDate}
-              />
-            </DatePickerDiv>
-          </>
-        );
-      case 2:
-        return (
-          <>
-            <H2>Choose Assignee:</H2>
-            <ProfileDiv className="row  mx-auto justify-content-center w-100">
-              {users.map((user, i) => (
-                <ProfileCard
-                  className="row mx-auto justify-content-center w-75"
-                  key={user.id}
-                  id={user.id}
-                  onClick={handlePerson}
-                  selected={selected[i]}
-                >
-                  <H3 className="col-6 my-auto mx-auto" id={user.id}>
-                    {user.name}
-                  </H3>
-                  <Img
-                    selected={selected[i]}
-                    className="my-auto mx-auto image"
-                    id={user.id}
-                    alt={user.name}
-                    src={user.profilePictureUrl}
-                  />
-                </ProfileCard>
-              ))}
-            </ProfileDiv>
-          </>
-        );
-      default:
-        return "Unknown stepIndex";
-    }
-  }
-
-  // const [alert, setAlert] = useState(false);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -216,11 +117,110 @@ function NewItem() {
       dueDate: dateFormat(new Date(), "yyyy-mm-dd"),
     });
   };
-  //////
+
+  function getStepContent(stepIndex) {
+    switch (stepIndex) {
+      case 0:
+        return (
+          <>
+            <H2>Basic details:</H2>
+            <Row mt="4">
+              <Label htmlFor="name">Name of item:</Label>
+              <Row>
+                <Col>
+                  <Input
+                    data-testid="name-input"
+                    type="text"
+                    name="name"
+                    aria-label={name}
+                    aria-required="true"
+                    required
+                    placeholder="..."
+                    onChange={handleChange}
+                    value={name}
+                  />
+                </Col>
+              </Row>
+            </Row>
+            <Row mt="4">
+              <Label htmlFor="description">Details about the item:</Label>
+              <Row>
+                <Col col="12" md="8">
+                  <Textarea
+                    data-testid="description-input"
+                    required
+                    type="text"
+                    name="description"
+                    aria-label={description}
+                    aria-required="true"
+                    placeholder="..."
+                    onChange={handleChange}
+                    value={description}
+                  />
+                </Col>
+              </Row>
+              <P>Used {description.length} characters out of 150.</P>
+            </Row>
+          </>
+        );
+      case 1:
+        return (
+          <>
+            <H2>Pick a date:</H2>
+            <DatePickerDiv className="row mx-auto justify-content-center w-100">
+              <Label htmlFor="date">Due date of the product:</Label>
+              <DatePickerStyled
+                data-testid="date-input"
+                name="date"
+                selected={startDate}
+                onChange={handleChangeDate}
+              />
+            </DatePickerDiv>
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <H2>Choose Assignee:</H2>
+            <ProfileDiv
+              data-testid="profiles-container"
+              className="row  mx-auto justify-content-center w-100"
+            >
+              {users.map((user, i) => (
+                <ProfileCard
+                  className="row mx-auto justify-content-center w-75"
+                  key={user.id}
+                  id={user.id}
+                  onClick={handlePerson}
+                  selected={selected[i]}
+                >
+                  <H3 className="col-6 my-auto mx-auto" noPointer>
+                    {user.name}
+                  </H3>
+                  <Img
+                    selected={selected[i]}
+                    className="my-auto mx-auto image"
+                    noPointer
+                    alt={user.name}
+                    src={user.profilePictureUrl}
+                  />
+                </ProfileCard>
+              ))}
+            </ProfileDiv>
+          </>
+        );
+      default:
+        return "Unknown stepIndex";
+    }
+  }
 
   return (
     <>
-      <Error open={isUsersError || isPostError} background={COLORS.danger} />
+      <Error
+        data-testid="error"
+        open={isUsersError || isPostError}
+        background={COLORS.danger}
+      />
       <Loader
         color={COLORS.background}
         open={isUsersLoading || isPostLoading}
@@ -231,6 +231,11 @@ function NewItem() {
       >
         <Row>
           <H1 main>New Item</H1>
+        </Row>
+        <Row mt="4" mb="3">
+          <Button special data-testid="shopping-button" onClick={handleClick}>
+            Go to shopping list
+          </Button>
         </Row>
         <Row>
           <Form
@@ -245,21 +250,21 @@ function NewItem() {
                   style={{ borderBottom: `3px solid ${COLORS.border}` }}
                   className="text-center mt-3"
                 >
-                  {`You are at step ${activeStep + 1} out of ${steps.length}`}
+                  {`You are at step ${activeStep + 1} out of ${steps}`}
                 </H3>
               </Col>
               <>
                 {getStepContent(activeStep)}
 
                 <Row
-                  mt="5"
+                  mt="4"
                   mb="1"
                   styled={{
                     borderTop: `3px solid ${COLORS.border}`,
                   }}
                 >
                   <ButtonRow className="row mx-auto w-100 ">
-                    {activeStep === steps.length - 1 ? (
+                    {activeStep === steps - 1 ? (
                       <>
                         <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
                           <Button
@@ -313,11 +318,6 @@ function NewItem() {
               </>
             </>
           </Form>
-        </Row>
-        <Row mt="4" mb="3">
-          <Button special onClick={handleClick}>
-            Go to shopping list
-          </Button>
         </Row>
       </Container>
     </>

@@ -83,7 +83,11 @@ function EditItem(props) {
         <Row>
           <Col col="12" md="6">
             <H1 main>Edit Item</H1>
-
+            <Row mb="5" mt="4">
+              <Button special onClick={handleHome}>
+                Go to shopping list
+              </Button>
+            </Row>
             <Form onSubmit={handleSubmit}>
               <Row w="100" mt="2" mb="3">
                 <Col col="12">
@@ -170,12 +174,6 @@ function EditItem(props) {
                 </Row>
               </Row>
             </Form>
-
-            <Row mb="3" mt="4">
-              <Button special onClick={handleHome}>
-                Go to shopping list
-              </Button>
-            </Row>
           </Col>
         </Row>
       </Container>

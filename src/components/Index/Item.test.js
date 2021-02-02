@@ -6,8 +6,6 @@ import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 
-// data-testid="item-container"
-
 afterEach(cleanup);
 
 describe("Item component tests", () => {
