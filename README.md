@@ -14,6 +14,7 @@ Made by KS. for Inspyre
 7. Mobile and tablet responsive 
 8. Added and customized a date picker which goes well with the design. 
 9. Form validation, character limitation (due to server errors)
+10. Due date notification on each item on the list page
 
 ## 1. View the app in action:
 
