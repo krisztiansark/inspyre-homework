@@ -13,6 +13,7 @@ Made by KS. for Inspyre
 6. Smooth transitions, loading animations and design was made for an enhanced User Experience
 7. Mobile and tablet responsive 
 8. Added and customized a date picker which goes well with the design. 
+9. Form validation, character limitation (due to server errors)
 
 ## 1. View the app in action:
 
@@ -33,6 +34,8 @@ The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
 ### - `npm test` / `npm run test`
+
+## NOTE: for the testing I used the real server to communicate with and in one instance I used the ID of the product called Grapefruit
 
 Launches the test runner in the interactive watch mode.\
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
