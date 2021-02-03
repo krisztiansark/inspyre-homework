@@ -10,7 +10,7 @@ function GetItemHook(id) {
     createdAt: "",
     updatedAt: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {

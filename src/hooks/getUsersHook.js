@@ -3,7 +3,7 @@ import axios from "axios";
 
 function GetUsersHook() {
   const [users, setUsers] = useState([]);
-  const [isUsersLoading, setIsUsersLoading] = useState(false);
+  const [isUsersLoading, setIsUsersLoading] = useState(true);
   const [isUsersError, setIsUsersError] = useState(false);
 
   useEffect(() => {
