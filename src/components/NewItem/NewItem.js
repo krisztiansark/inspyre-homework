@@ -115,6 +115,7 @@ function NewItem() {
       assignedTo: { id: "", name: "" },
       dueDate: dateFormat(new Date(), "yyyy-mm-dd"),
     });
+    setStartDate(new Date(), "yyyy-mm-dd");
   };
 
   function getStepContent(stepIndex) {
