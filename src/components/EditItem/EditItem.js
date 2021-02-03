@@ -30,7 +30,7 @@ function EditItem(props) {
 
   const [users, isUsersLoading, isUsersError] = GetUsersHook(id);
 
-  const [info, setInfo, isPatchLoading, isPatchError, patchHook] = PatchHook(
+  const [info, setInfo, isPatchLoading, isPatchError, patchRequest] = PatchHook(
     id,
     props.location.state
   );
@@ -50,7 +50,7 @@ function EditItem(props) {
   function handleSubmit(e) {
     e.preventDefault();
 
-    patchHook(id, info);
+    patchRequest(id, info);
   }
 
   function handlePerson(e) {

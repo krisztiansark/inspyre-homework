@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 
 function DeleteHook(id) {
   const [isLoadingDelete, setIsLoading] = useState(false);
   const [isErrorDelete, setIsError] = useState(false);
 
-  const deleteApi = async (id) => {
+  const deleteRequest = async (id) => {
     setIsLoading(true);
     setIsError(false);
     try {
@@ -19,7 +19,7 @@ function DeleteHook(id) {
     }
   };
 
-  return [isLoadingDelete, isErrorDelete, deleteApi];
+  return [isErrorDelete, deleteRequest, isLoadingDelete];
 }
 
 export default DeleteHook;

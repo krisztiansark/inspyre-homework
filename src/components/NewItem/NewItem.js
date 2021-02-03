@@ -33,7 +33,7 @@ import Error from "../Error/Error";
 function NewItem() {
   let history = useHistory();
   const [users, isUsersLoading, isUsersError] = GetUsersHook();
-  const [response, isPostLoading, isPostError, postRequest] = PostHook();
+  const [isPostLoading, isPostError, postRequest] = PostHook();
   const [activeStep, setActiveStep] = useState(0);
   const [info, setInfo] = useState({
     name: "",
@@ -75,7 +75,6 @@ function NewItem() {
 
   function handlePerson(e) {
     e.preventDefault();
-    console.log(e.target);
 
     let selectedUsers = [...selected];
     users.forEach((user, idx) => {

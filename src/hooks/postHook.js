@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 function PostHook() {
@@ -26,7 +26,7 @@ function PostHook() {
     }
   };
 
-  return [response, isPostLoading, isPostError, postRequest];
+  return [isPostLoading, isPostError, postRequest, response];
 }
 
 export default PostHook;

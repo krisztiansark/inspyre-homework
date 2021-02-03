@@ -19,7 +19,7 @@ function Item(props) {
   const { name, id } = props.item;
   const { odd } = props;
   const [item] = GetItemHook(id);
-  const [isLoadingDelete, isErrorDelete, deleteApi] = DeleteHook(id);
+  const [isErrorDelete, deleteRequest] = DeleteHook(id);
 
   const [deleted, setDeleted] = useState(false);
 
@@ -31,7 +31,7 @@ function Item(props) {
     setConfirm(!confirm);
   }
   function handleDelete() {
-    deleteApi(id);
+    deleteRequest(id);
     setDeleted(true);
   }
 

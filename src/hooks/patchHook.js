@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 function PatchHook(id, obj) {
@@ -7,7 +7,7 @@ function PatchHook(id, obj) {
   const [isPatchLoading, setIsPatchLoading] = useState(false);
   const [isPatchError, setIsPatchError] = useState(false);
 
-  let patchHook = async (id, obj) => {
+  const patchRequest = async (id, obj) => {
     let request, data;
     const { name, description, dueDate, assignedTo } = obj;
     setIsPatchLoading(true);
@@ -26,7 +26,7 @@ function PatchHook(id, obj) {
     }
   };
 
-  return [info, setInfo, isPatchLoading, isPatchError, patchHook];
+  return [info, setInfo, isPatchLoading, isPatchError, patchRequest];
 }
 
 export default PatchHook;

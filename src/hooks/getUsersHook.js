@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function GetUsersHook() {
@@ -7,6 +7,7 @@ function GetUsersHook() {
   const [isUsersError, setIsUsersError] = useState(false);
 
   useEffect(() => {
+    let unmount = false;
     let fetch = async () => {
       let request, data;
       setIsUsersLoading(true);
@@ -16,15 +17,21 @@ function GetUsersHook() {
           "https://frontend-assessment-api.herokuapp.com/users"
         );
         data = request.data.data;
-        setUsers(data);
-        setIsUsersLoading(false);
+        if (!unmount) {
+          setUsers(data);
+          setIsUsersLoading(false);
+        }
       } catch (err) {
-        setIsUsersError(true);
+        if (!unmount) {
+          setIsUsersError(true);
+        }
       }
     };
     fetch();
 
-    return () => {};
+    return () => {
+      unmount = true;
+    };
   }, []);
 
   return [users, isUsersLoading, isUsersError];

@@ -13,21 +13,21 @@ describe("delete hook test", () => {
     const { result, waitFor } = renderHook(() => deleteHook());
 
     describe("hook function initialized", () => {
-      expect(typeof result.current[2]).toBe("function");
+      expect(typeof result.current[1]).toBe("function");
     });
 
     describe("call delete request with bad id", () => {
       act(() => {
-        result.current[2](id);
+        result.current[1](id);
       });
     });
 
     describe("delete request loading boolean", () => {
-      expect(result.current[0]).toBe(true);
+      expect(result.current[2]).toBe(true);
     });
 
     // Wait to receive error with bad request id
-    await waitFor(() => expect(result.current[1]).toBe(true), {
+    await waitFor(() => expect(result.current[2]).toBe(true), {
       timeout: 5000,
     });
   });

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 function GetItemHook(id) {
@@ -14,6 +14,7 @@ function GetItemHook(id) {
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    let unmount = false;
     let fetch = async () => {
       let request, data;
       setIsLoading(true);
@@ -23,15 +24,21 @@ function GetItemHook(id) {
           `https://frontend-assessment-api.herokuapp.com/items/${id}`
         );
         data = request.data.data;
-        setItem(data);
-        setIsLoading(false);
+        if (!unmount) {
+          setItem(data);
+          setIsLoading(false);
+        }
       } catch (err) {
-        setIsError(true);
+        if (!unmount) {
+          setIsError(true);
+        }
       }
     };
     fetch();
 
-    return () => {};
+    return () => {
+      unmount = true;
+    };
   }, [id]);
 
   return [item, isLoading, isError];
