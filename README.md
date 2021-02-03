@@ -1,8 +1,7 @@
-# **WELCOME TO THE SHOPPING LIST FLAVOUR** 
+# **WELCOME TO THE SHOPPING LIST FLAVOUR**
 
 Made by KS. for Inspyre
 
-<<<<<<< HEAD
 ## WHAT DOES THE SHOPPING LIST DO?
 
 1. Fetches data from the server, lists all the products created by any user
@@ -18,24 +17,6 @@ Made by KS. for Inspyre
 
 ## 1. View the app in action:
 
-=======
-
-## WHAT DOES THE SHOPPING LIST DO?
-
-1. Fetches data from the server, lists all the products created by any user 
-2. Deletes data on the server, the user can remove items from the list
-3. The user is able to create new items in the list via a stepper form
-4. Users are able to modify the details of any item.
-5. If no connection or some error has occured during the server requests, the user will be notified by a notification window
-6. Smooth transitions, loading animations and design was made for an enhanced User Experience
-7. Mobile and tablet responsive 
-8. Added and customized a date picker which goes well with the design. 
-9. Form validation, character limitation (due to server errors)
-10. Due date notification on each item on the list page
-
-## 1. View the app in action:
-
->>>>>>> 63a3148e0ccc2115fb2ae9c8e12447b3c934cd9c
 You can try the application online here: https://react-inspyre.netlify.app/
 
 ## Available Scripts Run in the Dev Environment
@@ -66,7 +47,3 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
-<<<<<<< HEAD
-=======
-
->>>>>>> 63a3148e0ccc2115fb2ae9c8e12447b3c934cd9c
