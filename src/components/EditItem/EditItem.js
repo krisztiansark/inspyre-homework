@@ -7,13 +7,10 @@ import {
   H1,
   H3,
   Container,
-  Textarea,
-  Input,
   Form,
   DatePickerStyled,
   Img,
   Select,
-  P,
 } from "../../utils/globalStyles";
 import Row from "../blocks/Row";
 import Col from "../blocks/Col";
@@ -24,6 +21,7 @@ import PatchHook from "../../hooks/patchHook";
 import GetUsersHook from "../../hooks/getUsersHook";
 import Error from "../Error/Error";
 import GetItemHook from "../../hooks/getItemHook";
+import InputArea from "../InputArea/InputArea";
 function EditItem(props) {
   let history = useHistory();
 
@@ -129,30 +127,14 @@ function EditItem(props) {
                   </Col>
                 </Col>
               </Row>
-              <Label htmlFor="name">Edit item name:</Label>
-              <Row>
-                <Col mb="4">
-                  <Input
-                    type="text"
-                    name="name"
-                    value={info.name}
-                    onChange={handleChange}
-                  />
-                </Col>
-              </Row>
-              <Label htmlFor="description">Edit item description:</Label>
-              <Row mb="3" mt="2">
-                <Col col="11" md="10">
-                  <Textarea
-                    type="text"
-                    name="description"
-                    onChange={handleChange}
-                    value={info.description}
-                  />
-                </Col>
-                <P>Used {info.description.length} characters out of 150.</P>
-              </Row>
 
+              <InputArea
+                name={info.name}
+                onChange={handleChange}
+                description={info.description}
+                labelName="Edit item name:"
+                labelDesc="Edit item description:"
+              />
               <Label htmlFor="date">Edit due date:</Label>
               <DatePickerStyled
                 name="date"

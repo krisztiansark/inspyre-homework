@@ -8,16 +8,11 @@ import {
   H1,
   H3,
   Container,
-  Textarea,
-  Input,
   Form,
   DatePickerStyled,
-  Img,
   H2,
-  P,
   DatePickerDiv,
 } from "../../utils/globalStyles";
-import { ButtonDiv, ProfileCard, ProfileDiv, ButtonRow } from "./NewItemStyle";
 import Col from "../blocks/Col";
 import Row from "../blocks/Row";
 import Label from "../blocks/Label";
@@ -26,9 +21,9 @@ import Loader from "../Loader/Loader";
 import GetUsersHook from "../../hooks/getUsersHook";
 import PostHook from "../../hooks/postHook";
 import Error from "../Error/Error";
-////
-
-/////
+import InputArea from "../InputArea/InputArea";
+import UserProfile from "./UserProfile";
+import Buttons from "./Buttons";
 
 function NewItem() {
   let history = useHistory();
@@ -124,39 +119,16 @@ function NewItem() {
         return (
           <>
             <H2>Basic details:</H2>
-            <Row mt="4">
-              <Label htmlFor="name">Name of item:</Label>
-              <Row>
-                <Col>
-                  <Input
-                    data-testid="name-input"
-                    type="text"
-                    name="name"
-                    required
-                    placeholder="..."
-                    onChange={handleChange}
-                    value={name}
-                  />
-                </Col>
-              </Row>
-            </Row>
-            <Row mt="4">
-              <Label htmlFor="description">Details about the item:</Label>
-              <Row>
-                <Col col="12" md="8">
-                  <Textarea
-                    data-testid="description-input"
-                    required
-                    type="text"
-                    name="description"
-                    placeholder="..."
-                    onChange={handleChange}
-                    value={description}
-                  />
-                </Col>
-              </Row>
-              <P>Used {description.length} characters out of 150.</P>
-            </Row>
+            <InputArea
+              name={name}
+              description={description}
+              onChange={handleChange}
+              placeholderName="..."
+              placeholderDesc="..."
+              labelName="Name of item:"
+              labelDesc="Details about the item:"
+              mt="4"
+            />
           </>
         );
       case 1:
@@ -178,31 +150,11 @@ function NewItem() {
         return (
           <>
             <H2>Choose Assignee:</H2>
-            <ProfileDiv
-              data-testid="profiles-container"
-              className="row  mx-auto justify-content-center w-100"
-            >
-              {users.map((user, i) => (
-                <ProfileCard
-                  className="row mx-auto justify-content-center w-75"
-                  key={user.id}
-                  id={user.id}
-                  onClick={handlePerson}
-                  selected={selected[i]}
-                >
-                  <H3 className="col-6 my-auto mx-auto" noPointer>
-                    {user.name}
-                  </H3>
-                  <Img
-                    selected={selected[i]}
-                    className="my-auto mx-auto image"
-                    noPointer
-                    alt={user.name}
-                    src={user.profilePictureUrl}
-                  />
-                </ProfileCard>
-              ))}
-            </ProfileDiv>
+            <UserProfile
+              users={users}
+              selected={selected}
+              handlePerson={handlePerson}
+            />
           </>
         );
       default:
@@ -251,65 +203,15 @@ function NewItem() {
               <>
                 {getStepContent(activeStep)}
 
-                <Row
-                  mt="4"
-                  mb="1"
-                  styled={{
-                    borderTop: `3px solid ${COLORS.border}`,
-                  }}
-                >
-                  <ButtonRow className="row mx-auto w-100 ">
-                    {activeStep === steps - 1 ? (
-                      <>
-                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
-                          <Button
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                          >
-                            Back
-                          </Button>
-                        </ButtonDiv>
-                        <ButtonDiv className="col-6 col-md-3 text-center mx-auto">
-                          <Button
-                            danger
-                            className="mx-3 text-center"
-                            onClick={handleReset}
-                          >
-                            Reset
-                          </Button>
-                        </ButtonDiv>{" "}
-                        <ButtonDiv className="col-6 col-md-3 text-center mx-auto">
-                          <Button
-                            type="submit"
-                            className="mx-3 "
-                            disabled={isInvalid}
-                          >
-                            Submit
-                          </Button>
-                        </ButtonDiv>
-                      </>
-                    ) : (
-                      <>
-                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
-                          <Button
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                          >
-                            Back
-                          </Button>
-                        </ButtonDiv>
-                        <ButtonDiv className="col-6 col-md-3 mx-auto text-center">
-                          <Button
-                            disabled={isInvalidEach[activeStep]}
-                            onClick={handleNext}
-                          >
-                            Next
-                          </Button>
-                        </ButtonDiv>
-                      </>
-                    )}
-                  </ButtonRow>
-                </Row>
+                <Buttons
+                  activeStep={activeStep}
+                  handleBack={handleBack}
+                  handleReset={handleReset}
+                  isInvalid={isInvalid}
+                  isInvalidEach={isInvalidEach}
+                  handleNext={handleNext}
+                  steps={steps}
+                />
               </>
             </>
           </Form>
