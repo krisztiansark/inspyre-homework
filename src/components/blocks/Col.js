@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 function Col(props) {
   const { text, mb, mt, styled, col, md, lg, mxOff, textSm, my } = props;
 
@@ -23,5 +23,18 @@ function Col(props) {
     </div>
   );
 }
+
+Col.propTypes = {
+  text: PropTypes.string,
+  mb: PropTypes.string,
+  mt: PropTypes.string,
+  col: PropTypes.string,
+  md: PropTypes.string,
+  lg: PropTypes.string,
+  maxOff: PropTypes.bool,
+  textSm: PropTypes.string,
+  my: PropTypes.bool,
+  styled: PropTypes.object,
+};
 
 export default Col;

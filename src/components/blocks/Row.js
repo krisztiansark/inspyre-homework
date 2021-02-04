@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 function Row(props) {
   const { justify, mb, mt, styled, w } = props;
 
@@ -17,5 +17,12 @@ function Row(props) {
     </div>
   );
 }
+Row.propTypes = {
+  justify: PropTypes.string,
+  mb: PropTypes.string,
+  mt: PropTypes.string,
+  styled: PropTypes.object,
+  w: PropTypes.string,
+};
 
 export default Row;

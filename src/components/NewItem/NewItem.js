@@ -132,8 +132,6 @@ function NewItem() {
                     data-testid="name-input"
                     type="text"
                     name="name"
-                    aria-label={name}
-                    aria-required="true"
                     required
                     placeholder="..."
                     onChange={handleChange}
@@ -151,8 +149,6 @@ function NewItem() {
                     required
                     type="text"
                     name="description"
-                    aria-label={description}
-                    aria-required="true"
                     placeholder="..."
                     onChange={handleChange}
                     value={description}
@@ -170,8 +166,8 @@ function NewItem() {
             <DatePickerDiv className="row mx-auto justify-content-center w-100">
               <Label htmlFor="date">Due date of the product:</Label>
               <DatePickerStyled
-                data-testid="date-input"
                 name="date"
+                data-testid="date-input"
                 selected={startDate}
                 onChange={handleChangeDate}
               />
@@ -244,7 +240,6 @@ function NewItem() {
             onSubmit={handleSubmit}
           >
             <>
-              {alert ? <h1>Please fill the empty fields</h1> : null}
               <Col mt="3">
                 <H3
                   style={{ borderBottom: `3px solid ${COLORS.border}` }}

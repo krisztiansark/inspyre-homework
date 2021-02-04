@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 function Label(props) {
   const { htmlFor, justify, mb, mt, styled } = props;
 
@@ -17,5 +17,12 @@ function Label(props) {
     </label>
   );
 }
+Label.propTypes = {
+  justify: PropTypes.string,
+  htmlFor: PropTypes.string,
+  mt: PropTypes.string,
+  styled: PropTypes.object,
+  mb: PropTypes.string,
+};
 
 export default Label;

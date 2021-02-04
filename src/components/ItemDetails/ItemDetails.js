@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   Button,
   H1,
@@ -43,7 +44,7 @@ function ItemDetails(props) {
               styled={{
                 borderBottom: `3px solid ${COLORS.border}`,
               }}
-              mb={3}
+              mb="3"
               justify="around"
             >
               <Col text="left" col="12" md="6" mb="2">
@@ -78,7 +79,7 @@ function ItemDetails(props) {
             </Row>
             <Row justify="center">
               <ColFancy bottom className="col-8 col-md-5 my-auto">
-                <Row mb={2}>
+                <Row mb="2">
                   <H3>{assignedTo.name}</H3>
                   <Img
                     sm
@@ -90,7 +91,7 @@ function ItemDetails(props) {
             </Row>
 
             <Row
-              mb={3}
+              mb="3"
               styled={{
                 borderBottom: `3px solid ${COLORS.border}`,
               }}
@@ -100,7 +101,7 @@ function ItemDetails(props) {
               </Description>
             </Row>
 
-            <Row mb={2} mt={2}>
+            <Row mb="2" mt="2">
               <div className="col-4">
                 <Button onClick={handleClick}>Back</Button>
               </div>
@@ -124,5 +125,7 @@ function ItemDetails(props) {
     </>
   );
 }
+
+ItemDetails.propTypes = { match: PropTypes.object };
 
 export default ItemDetails;

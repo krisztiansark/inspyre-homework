@@ -17,7 +17,7 @@ function Index() {
   function fetchedResults() {
     return results.length > 0 ? (
       results.map((item, idx) => {
-        return <Item odd={idx} key={item.id} item={item} />;
+        return <Item key={item.id} item={item} />;
       })
     ) : (
       <>

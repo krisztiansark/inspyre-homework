@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import PropTypes from "prop-types";
 import { Button, H2, H1, H3, RouterLink } from "../../utils/globalStyles";
 import {
   ContainerItem,
@@ -17,7 +17,6 @@ import { COLORS } from "../../utils/styleConstants";
 import Error from "../Error/Error";
 function Item(props) {
   const { name, id } = props.item;
-  const { odd } = props;
   const [item] = GetItemHook(id);
   const [isErrorDelete, deleteRequest] = DeleteHook(id);
 
@@ -43,7 +42,6 @@ function Item(props) {
         <Col deleted={deleted} mt="3" md="6">
           <ContainerItem
             deleted={deleted}
-            odd={odd}
             className="row mx-auto w-100 justify-content-center mx-auto mb-3 pb-2 pt-2 mt-3"
           >
             <ConfirmationDiv confirm={confirm}>
@@ -98,5 +96,8 @@ function Item(props) {
     </>
   );
 }
+Item.propTypes = {
+  item: PropTypes.object,
+};
 
 export default Item;
