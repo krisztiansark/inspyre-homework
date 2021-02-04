@@ -6,7 +6,6 @@ function UserProfile({ users, selected, handlePerson }) {
   return (
     <>
       <ProfileDiv
-        data-testid="profiles-container"
         className="row mx-auto justify-content-center w-100"
         data-testid="profile-div"
       >
