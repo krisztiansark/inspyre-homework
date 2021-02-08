@@ -7,6 +7,8 @@ import "@testing-library/jest-dom";
 
 afterEach(cleanup);
 
+jest.setTimeout(7000);
+
 describe("get hook test", () => {
   it("Item component test", async () => {
     const { result, waitFor } = renderHook(() => getHook());
@@ -15,7 +17,9 @@ describe("get hook test", () => {
       expect(result.current[1]).toBe(true);
     });
 
-    await waitFor(() => expect(result.current[1]).toBe(false));
+    await waitFor(() => expect(result.current[1]).toBe(false), {
+      timeout: 6000,
+    });
 
     describe("no error while get request", () => {
       expect(result.current[2]).toBe(false);

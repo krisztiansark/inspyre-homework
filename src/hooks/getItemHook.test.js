@@ -19,7 +19,7 @@ describe("get item hook test", () => {
     });
 
     await waitFor(() => expect(result.current[2]).toBe(true), {
-      timeout: 5000,
+      timeout: 6000,
     });
   });
 });

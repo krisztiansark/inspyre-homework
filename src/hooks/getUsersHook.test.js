@@ -1,11 +1,10 @@
-import { cleanup } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import getUsersHook from "./getUsersHook";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom";
 
-afterEach(cleanup);
+jest.setTimeout(7000);
 
 describe("get Users hook test", () => {
   it("calling async get users", async () => {
@@ -16,7 +15,9 @@ describe("get Users hook test", () => {
       expect(isUsersLoading).toBe(true);
     });
 
-    await waitFor(() => expect(result.current[1]).toBe(false));
+    await waitFor(() => expect(result.current[1]).toBe(false), {
+      timeout: 6000,
+    });
 
     describe("no error while get users request", () => {
       expect(isUsersError).toBe(false);

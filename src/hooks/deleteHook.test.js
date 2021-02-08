@@ -28,7 +28,7 @@ describe("delete hook test", () => {
 
     // Wait to receive error with bad request id
     await waitFor(() => expect(result.current[2]).toBe(true), {
-      timeout: 5000,
+      timeout: 6000,
     });
   });
 });
