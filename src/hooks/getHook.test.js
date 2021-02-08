@@ -1,11 +1,8 @@
-import { cleanup } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 import getHook from "./getHook";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom";
-
-afterEach(cleanup);
 
 jest.setTimeout(7000);
 

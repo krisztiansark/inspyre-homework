@@ -17,7 +17,7 @@ import { COLORS } from "../../utils/styleConstants";
 import Error from "../Error/Error";
 function Item(props) {
   const { name, id } = props.item;
-  const [item] = GetItemHook(id);
+  const [item, isLoading, isError] = GetItemHook(id);
   const [isErrorDelete, deleteRequest] = DeleteHook(id);
 
   const [deleted, setDeleted] = useState(false);
@@ -36,7 +36,7 @@ function Item(props) {
 
   return (
     <>
-      <Error open={isErrorDelete} background={COLORS.danger} />
+      <Error open={isErrorDelete || isError} background={COLORS.danger} />
 
       {deleted ? null : (
         <Col deleted={deleted} mt="3" md="6">
@@ -67,10 +67,14 @@ function Item(props) {
                 </Col>
 
                 <Col col="12" md="5" text="right">
-                  <H3 anim>
-                    <DueSignal due={item.dueDate < today}>➔</DueSignal>
-                    {item.dueDate}
-                  </H3>
+                  {!isLoading ? (
+                    <H3 anim>
+                      <DueSignal due={item.dueDate < today}>➔</DueSignal>
+                      {item.dueDate}
+                    </H3>
+                  ) : (
+                    <H3>Loading...</H3>
+                  )}
                 </Col>
               </Row>
               <Row w="100" mt="4" justify="around">

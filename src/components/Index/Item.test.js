@@ -1,12 +1,10 @@
 import React from "react";
-import { render, fireEvent, cleanup } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import Item from "./Item";
 import "core-js/stable";
 import "regenerator-runtime/runtime";
 import "@testing-library/jest-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-
-afterEach(cleanup);
 
 describe("Item component tests", () => {
   it("Item component test", async () => {
